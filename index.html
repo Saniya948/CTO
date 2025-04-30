@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Centrala Trust for Ornithology - Protecting and monitoring bird populations in urban environments">
+    <title>Centrala Trust for Ornithology</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3a7d44;
+            --secondary: #6bbf59;
+            --accent: #ff914d;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --text: #333;
+            --text-light: #6c757d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: #f5f5f5;
+        }
+        
+        nav {
+            background-color: var(--primary);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+        
+        nav li {
+            margin: 0 1rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover {
+            background-color: var(--secondary);
+        }
+        
+        header {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1452570053594-1b985d6ea890?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 5rem 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        header p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem 2rem;
+        }
+        
+        section {
+            margin-bottom: 3rem;
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--secondary);
+        }
+        
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .image-gallery img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+        }
+        
+        .image-gallery img:hover {
+            transform: scale(1.03);
+        }
+        
+        .benefits {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .benefits-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .benefits-bg {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 40%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1551085254-e96b210db58a?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80') center/cover;
+            opacity: 0.2;
+            z-index: 1;
+        }
+        
+        .benefits ul {
+            list-style-position: inside;
+            column-count: 2;
+            column-gap: 2rem;
+        }
+        
+        .benefits li {
+            margin-bottom: 0.8rem;
+            padding-left: 0.5rem;
+        }
+        
+        .benefits li::before {
+            content: "🐦";
+            margin-right: 0.5rem;
+        }
+        
+        .mission-stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .stat-item {
+            padding: 1rem;
+            min-width: 200px;
+        }
+        
+        .stat-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .cta {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .cta-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1501706362039-c06b2d439385?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover;
+            opacity: 0.15;
+            z-index: 1;
+        }
+        
+        .cta h2 {
+            color: white;
+            border-bottom: 2px solid white;
+        }
+        
+        .button {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+        }
+        
+        .button:hover {
+            background-color: #ff7b35;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 8px rgba(0,0,0,0.3);
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .social-links a {
+            color: white;
+            margin: 0 0.5rem;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            color: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .bird-icon {
+            width: 30px;
+            height: 30px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.2rem;
+            }
+            
+            header p {
+                font-size: 1.2rem;
+            }
+            
+            .benefits ul {
+                column-count: 1;
+            }
+            
+            .benefits-bg {
+                width: 100%;
+                opacity: 0.1;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav li {
+                margin: 0.3rem 0;
+            }
+            
+            .mission-stats {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .stat-item {
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="register.html"><i class="fas fa-user-plus"></i> Register</a></li>
+            <li><a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+            <li><a href="new-post.html"><i class="fas fa-binoculars"></i> New Observation</a></li>
+            <li><a href="posts.html"><i class="fas fa-list"></i> View Observations</a></li>
+        </ul>
+    </nav>
+    
+    <header>
+        <h1><img src="https://cdn-icons-png.flaticon.com/512/1864/1864593.png" alt="Bird icon" class="bird-icon">Centrala Trust for Ornithology</h1>
+        <p>Helping birds thrive in urban environments</p>
+    </header>
+    
+    <main>
+        <section class="mission">
+            <h2><i class="fas fa-dove"></i> Our Mission</h2>
+            <p>The CTO works to monitor and protect bird populations across Centrala municipality. By tracking sightings and behaviors, we help inform environmental planning to create a more bird-friendly urban landscape.</p>
+            
+            <div class="image-gallery">
+                <img src="https://images.unsplash.com/photo-1551085254-e96b210db58a?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Blue Tit in urban garden">
+                <img src="https://images.unsplash.com/photo-1512544783971-fb9a0691eda5?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Robin on a fence">
+                <img src="https://th.bing.com/th/id/OIP.1oU9io4y_QCk_eCAuIPiIQHaEK?w=780&h=438&rs=1&pid=ImgDetMain" alt="House Sparrows feeding together">
+            </div>
+            
+            <div class="mission-stats">
+                <div class="stat-item">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3163/3163478.png" alt="Species icon">
+                    <div class="stat-number">142+</div>
+                    <div class="stat-label">Bird Species Tracked</div>
+                </div>
+                <div class="stat-item">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3163/3163473.png" alt="Volunteers icon">
+                    <div class="stat-number">560</div>
+                    <div class="stat-label">Active Volunteers</div>
+                </div>
+                <div class="stat-item">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3163/3163457.png" alt="Observations icon">
+                    <div class="stat-number">12,843</div>
+                    <div class="stat-label">Annual Observations</div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="benefits">
+            <div class="benefits-bg"></div>
+            <div class="benefits-content">
+                <h2><i class="fas fa-question-circle"></i> Why Birds Matter</h2>
+                <ul>
+                    <li>Birds are indicators of environmental health</li>
+                    <li>Birdwatching improves mental wellbeing</li>
+                    <li>Urban birds help control pests</li>
+                    <li>Birds pollinate plants and disperse seeds</li>
+                    <li>They contribute to biodiversity</li>
+                    <li>Birds inspire art and culture</li>
+                    <li>They connect people with nature</li>
+                    <li>Birds contribute to scientific research</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section class="cta">
+            <div class="cta-bg"></div>
+            <div class="cta-content">
+                <h2><i class="fas fa-hands-helping"></i> Get Involved</h2>
+                <p>Join our community of bird enthusiasts and contribute to important conservation efforts. Together we can make a difference for our feathered friends.</p>
+                <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                    <a href="register.html" class="button">Register Now <i class="fas fa-arrow-right"></i></a>
+                    <a href="#" class="button" style="background: white; color: var(--primary);">Learn More <i class="fas fa-info-circle"></i></a>
+                </div>
+            </div>
+        </section>
+        
+        <section class="testimonials">
+            <h2><i class="fas fa-comment-alt"></i> What Our Members Say</h2>
+            <div class="image-gallery" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                <div style="background: var(--light); padding: 1.5rem; border-radius: 8px; display: flex; flex-direction: column;">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Sarah J." style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; align-self: center; margin-bottom: 1rem;">
+                    <p style="flex-grow: 1;">"Joining CTO transformed my daily walks. I now notice birds everywhere and feel part of something important."</p>
+                    <div style="font-weight: bold; margin-top: 1rem;">Sarah J.</div>
+                    <div style="color: var(--text-light); font-size: 0.8rem;">Member since 2018</div>
+                </div>
+                <div style="background: var(--light); padding: 1.5rem; border-radius: 8px; display: flex; flex-direction: column;">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Michael T." style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; align-self: center; margin-bottom: 1rem;">
+                    <p style="flex-grow: 1;">"The app makes reporting sightings so easy. I've logged over 200 observations this year alone!"</p>
+                    <div style="font-weight: bold; margin-top: 1rem;">Michael T.</div>
+                    <div style="color: var(--text-light); font-size: 0.8rem;">Volunteer Leader</div>
+                </div>
+                <div style="background: var(--light); padding: 1.5rem; border-radius: 8px; display: flex; flex-direction: column;">
+                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Priya K." style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; align-self: center; margin-bottom: 1rem;">
+                    <p style="flex-grow: 1;">"My kids love our weekend birdwatching trips. CTO helped us discover nature right in our city."</p>
+                    <div style="font-weight: bold; margin-top: 1rem;">Priya K.</div>
+                    <div style="color: var(--text-light); font-size: 0.8rem;">Family Member</div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2023 Centrala Trust for Ornithology. Partnered with the Centrala Environmental Agency.</p>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+        </div>
+        <p style="margin-top: 1rem; font-size: 0.8rem;">
+            <img src="https://cdn-icons-png.flaticon.com/512/1864/1864593.png" alt="Bird icon" style="width: 20px; vertical-align: middle;">
+            Protecting our feathered friends since 2005
+        </p>
+    </footer>
+    
+    <script src="js/main.min.js"></script>
+</body>
+</html>

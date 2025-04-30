@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Observation - Centrala Trust for Ornithology</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        :root {
+            --primary: #3a7d44;
+            --secondary: #6bbf59;
+            --accent: #ff914d;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --text: #333;
+            --text-light: #6c757d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        nav {
+            background-color: var(--primary);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+        
+        nav li {
+            margin: 0 1rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover {
+            background-color: var(--secondary);
+        }
+        
+        .form-page {
+            max-width: 700px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            flex-grow: 1;
+            width: 90%;
+        }
+        
+        .form-page h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(58, 125, 68, 0.2);
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .form-group small {
+            display: block;
+            margin-top: 0.3rem;
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+        
+        .button {
+            display: block;
+            width: 100%;
+            background-color: var(--accent);
+            color: white;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.5rem;
+        }
+        
+        .button:hover {
+            background-color: #ff7b35;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+        }
+        
+        .preview-container {
+            margin-top: 1rem;
+            text-align: center;
+        }
+        
+        .image-preview {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 4px;
+            display: none;
+            margin: 0 auto;
+        }
+        
+        #centrala-map {
+            height: 300px;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border: 1px solid #ddd;
+            z-index: 1;
+        }
+        
+        .map-container {
+            position: relative;
+        }
+        
+        .map-label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-size: 0.9rem;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: auto;
+        }
+        
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav li {
+                margin: 0.3rem 0;
+            }
+            
+            .form-page {
+                padding: 1.5rem;
+            }
+            
+            #centrala-map {
+                height: 250px;
+            }
+        }
+        
+        /* Custom select arrow */
+        .form-group select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="register.html"><i class="fas fa-user-plus"></i> Register</a></li>
+            <li><a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+            <li><a href="new-post.html"><i class="fas fa-binoculars"></i> New Observation</a></li>
+            <li><a href="posts.html"><i class="fas fa-list"></i> View Observations</a></li>
+        </ul>
+    </nav>
+    
+    <main class="form-page">
+        <h1><i class="fas fa-binoculars"></i> Report a Bird Sighting</h1>
+        <form id="observationForm">
+            <div class="form-group">
+                <label for="observerName">Your Username:</label>
+                <input type="text" id="observerName" name="observerName" required placeholder="Enter your username">
+            </div>
+            
+            <div class="form-group">
+                <label for="location">Location:</label>
+                <select id="location" name="location" required>
+                    <option value="">Select a location</option>
+                    <option value="Erean">Erean</option>
+                    <option value="Zord">Zord</option>
+                    <option value="Brunad">Brunad</option>
+                    <option value="Bylyn">Bylyn</option>
+                    <option value="Docia">Docia</option>
+                    <option value="Marend">Marend</option>
+                    <option value="Pryn">Pryn</option>
+                    <option value="Yaean">Yaean</option>
+                    <option value="Keivia">Keivia</option>
+                    <option value="Tallan">Tallan</option>
+                    <option value="Frestin">Frestin</option>
+                    <option value="Adohad">Adohad</option>
+                    <option value="Stonyam">Stonyam</option>
+                    <option value="Obelyn">Obelyn</option>
+                    <option value="Ryall">Ryall</option>
+                    <option value="Holmer">Holmer</option>
+                    <option value="Ruril">Ruril</option>
+                    <option value="Vertwall">Vertwall</option>
+                </select>
+                <div class="map-container">
+                    <div class="map-label">Centrala Municipality Map</div>
+                    <div id="centrala-map"></div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="observationDate">Date of Observation:</label>
+                <input type="date" id="observationDate" name="observationDate" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="observationTime">Time of Observation:</label>
+                <input type="time" id="observationTime" name="observationTime" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="birdSpecies">Bird Species:</label>
+                <select id="birdSpecies" name="birdSpecies" required>
+                    <option value="">Select a species</option>
+                    <option value="Wood Pigeon">Wood Pigeon</option>
+                    <option value="House Sparrow">House Sparrow</option>
+                    <option value="Starling">Starling</option>
+                    <option value="Blue Tit">Blue Tit</option>
+                    <option value="Blackbird">Blackbird</option>
+                    <option value="Robin">Robin</option>
+                    <option value="Goldfinch">Goldfinch</option>
+                    <option value="Magpie">Magpie</option>
+                    <option value="Other/Unknown">Other/Unknown</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="activity">Primary Activity:</label>
+                <select id="activity" name="activity" required>
+                    <option value="">Select activity</option>
+                    <option value="Visit">Visit</option>
+                    <option value="Feeding">Feeding</option>
+                    <option value="Nesting">Nesting</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="duration">Duration (minutes):</label>
+                <input type="number" id="duration" name="duration" min="1" required placeholder="Estimated duration in minutes">
+            </div>
+            
+            <div class="form-group">
+                <label for="comments">Comments:</label>
+                <textarea id="comments" name="comments" rows="4" placeholder="Any additional details about the observation"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="birdImage">Upload Image (optional, max 1.2MB):</label>
+                <input type="file" id="birdImage" name="birdImage" accept="image/jpeg, image/png">
+                <small>Accepted formats: JPG, PNG. Maximum size: 1.2MB</small>
+                <div class="preview-container">
+                    <img id="imagePreview" class="image-preview" alt="Image preview">
+                </div>
+            </div>
+            
+            <button type="submit" class="button">Submit Observation <i class="fas fa-paper-plane"></i></button>
+        </form>
+    </main>
+    
+    <footer>
+        <p>&copy; 2023 Centrala Trust for Ornithology. Partnered with the Centrala Environmental Agency.</p>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Initialize the map
+        const map = L.map('centrala-map').setView([51.505, -0.09], 12);
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 18,
+        }).addTo(map);
+
+        // Add some sample markers for Centrala locations
+        const locations = {
+            "Erean": [51.51, -0.08],
+            "Zord": [51.50, -0.10],
+            "Brunad": [51.52, -0.07],
+            "Bylyn": [51.49, -0.09],
+            "Docia": [51.505, -0.11],
+            "Marend": [51.515, -0.095],
+            "Pryn": [51.495, -0.085],
+            "Yaean": [51.51, -0.12],
+            "Keivia": [51.50, -0.06],
+            "Tallan": [51.53, -0.10],
+            "Frestin": [51.48, -0.08],
+            "Adohad": [51.52, -0.12],
+            "Stonyam": [51.49, -0.11],
+            "Obelyn": [51.515, -0.075],
+            "Ryall": [51.505, -0.065],
+            "Holmer": [51.525, -0.085],
+            "Ruril": [51.485, -0.095],
+            "Vertwall": [51.535, -0.115]
+        };
+
+        // Add markers to the map
+        Object.entries(locations).forEach(([name, coords]) => {
+            L.marker(coords).addTo(map)
+                .bindPopup(`<b>${name}</b><br>Click to select this location`)
+                .on('click', () => {
+                    document.getElementById('location').value = name;
+                });
+        });
+
+        // Center map when location is selected from dropdown
+        document.getElementById('location').addEventListener('change', function() {
+            const selectedLocation = this.value;
+            if (selectedLocation && locations[selectedLocation]) {
+                map.setView(locations[selectedLocation], 14);
+            }
+        });
+
+        // Image preview functionality
+        document.getElementById('birdImage').addEventListener('change', function(e) {
+            const preview = document.getElementById('imagePreview');
+            const file = e.target.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(event) {
+                    preview.src = event.target.result;
+                    preview.style.display = 'block';
+                }
+                
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+        
+        // Set default date to today
+        document.getElementById('observationDate').valueAsDate = new Date();
+        
+        // Set default time to now
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        document.getElementById('observationTime').value = `${hours}:${minutes}`;
+    </script>
+    
+    <script src="js/main.min.js"></script>
+</body>
+</html>
